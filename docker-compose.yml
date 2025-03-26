@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  regex_crawler:
+    build: .
+    container_name: regex_crawler
+    command: uvicorn main:app --host 0.0.0.0 --port 3000
+    working_dir: /root/app/
+    image: vicourtgcb/regex_crawler:latest
+    ports:
+      - "3000:3000"
