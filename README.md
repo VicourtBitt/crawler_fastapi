@@ -75,6 +75,11 @@ pip install -r requirements.txt
 ---
 
 ### Documentation
-[FastAPI Scrapper Container]()
+***Scrapper Class:***
+- [FastAPI Scrapper](https://github.com/VicourtBitt/crawler_fastapi/blob/main/regex_crawler/docs/overview.md)
 
-[FastAPI Local]()
+- [FastAPI Scrapper Container](https://github.com/VicourtBitt/crawler_fastapi/blob/main/regex_crawler/docs/docker-container.md)
+
+
+***Outer FastAPI:***
+- [FastAPI Local](https://github.com/VicourtBitt/crawler_fastapi/blob/main/service-caller/docs/overview.md)
