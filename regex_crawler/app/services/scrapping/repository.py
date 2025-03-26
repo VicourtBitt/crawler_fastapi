@@ -19,7 +19,7 @@ class Scrapper:
 
     @staticmethod
     def fetch_all_products(url: str = None, pages: int = 1) -> list:
-        if not url:
+        if not url or url == None:
             logger.error("Setting default technical test URL")
             url = "https://webscraper.io/test-sites/e-commerce/static/computers/laptops"
         
@@ -69,7 +69,7 @@ class Scrapper:
 
     @staticmethod
     def fetch_by_id(url: str = None, id: int = 1) -> dict:
-        if not url:
+        if not url or url == None:
             logger.info("Setting default technical test URL")
             url = f"https://webscraper.io/test-sites/e-commerce/static/product/{id}"
             
@@ -116,7 +116,7 @@ class Scrapper:
 
     @staticmethod
     def fetch_by_page(url: str = None, page: int = 1) -> list:
-        if not url:
+        if not url or url == None:
             logger.info("Setting default technical test URL")
             url = f"https://webscraper.io/test-sites/e-commerce/static/computers/laptops?page={page}"
 
