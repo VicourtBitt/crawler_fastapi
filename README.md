@@ -12,6 +12,17 @@ The project uses an SOA (Service-Oriented-Architecture) approach to handle route
 - Inner FastAPI with Scrapper Class (Docker Service to be called);
 ---
 
+### How to run
+Make sure that you're as a super user (sudo) or has admin permissions, then you could only run the "run_service.sh" to be able to start both servers.
+***regex_crawler*** will be in port 3000, while ***service_caller*** in port 8000.
+
+To call any API, you could only do:
+```
+http://localhost:8000/api/v1/crawler # To receive the first page
+```
+
+---
+
 ### Requirements
 Those are the following requirements to start and run the project.
 
