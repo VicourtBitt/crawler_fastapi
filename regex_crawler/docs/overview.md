@@ -1,10 +1,10 @@
-# Documentação do Projeto: Regex Crawler
+# Project Documentation: Regex Crawler
 
-Este documento fornece uma visão detalhada da estrutura do projeto **Regex Crawler**, incluindo a organização dos diretórios e arquivos, bem como descrições de suas funções e conteúdos.
+This document provides a detailed overview of the **Regex Crawler** project structure, including the organization of directories and files, as well as descriptions of their functions and contents.
 
-## Estrutura de Diretórios
+## Directory Structure
 
-A estrutura do projeto é organizada da seguinte forma:
+The project is organized as follows:
 
 ```
 root
@@ -23,64 +23,64 @@ root
 │               └── routes.py
 ```
 
-### Descrição dos Diretórios e Arquivos
+### Directory and File Descriptions
 
-- **root/**: Diretório raiz que contém todos os arquivos e subdiretórios do projeto.
+- **root/**: Root directory containing all files and subdirectories of the project.
 
-  - **regex_crawler/**: Diretório principal do projeto.
+  - **regex_crawler/**: Main project directory.
 
-    - **docs/**: Diretório reservado para a documentação do projeto.
+    - **docs/**: Directory reserved for project documentation.
 
-    - **requirements.txt**: Arquivo que lista todas as dependências do projeto. Este arquivo é utilizado para instalar os pacotes necessários com o comando `pip install -r requirements.txt`.
+    - **requirements.txt**: File listing all project dependencies. This file is used to install the required packages with the command `pip install -r requirements.txt`.
 
-    - **Dockerfile**: Arquivo que contém as instruções para a criação da imagem Docker do projeto. Este arquivo define o ambiente necessário para a execução da aplicação, incluindo a instalação de dependências e a configuração do ambiente.
+    - **Dockerfile**: File containing instructions for creating the project's Docker image. This file defines the environment required to run the application, including dependency installation and configuration settings.
 
-    - **docker-compose.yml**: Arquivo de configuração do Docker Compose. Este arquivo permite orquestrar múltiplos contêineres, facilitando a configuração e execução de ambientes complexos que podem incluir bancos de dados, serviços de cache, entre outros.
+    - **docker-compose.yml**: Docker Compose configuration file. This file allows for orchestrating multiple containers, facilitating the setup and execution of complex environments that may include databases, caching services, and more.
 
-    - **app/**: Diretório que contém o código-fonte principal da aplicação.
+    - **app/**: Directory containing the application's main source code.
 
-      - **core/**: Módulo responsável pelas configurações centrais da aplicação.
+      - **core/**: Module responsible for the application's central configurations.
 
-        - **config.py**: Arquivo que gerencia as configurações globais da aplicação, como variáveis de ambiente, parâmetros de configuração e outras definições essenciais.
+        - **config.py**: File managing the application's global settings, such as environment variables, configuration parameters, and other essential definitions.
 
-      - **main.py**: Arquivo principal que inicia a aplicação FastAPI. Este arquivo configura a aplicação, incluindo as rotas e middleware necessários, e inicia o servidor.
+      - **main.py**: Main file that starts the FastAPI application. This file sets up the application, including routes and necessary middleware, and starts the server.
 
-      - **services/**: Diretório que contém os módulos de serviços da aplicação.
+      - **services/**: Directory containing the application's service modules.
 
-        - **scrapping/**: Módulo específico para operações de web scraping.
+        - **scrapping/**: Module dedicated to web scraping operations.
 
-          - **repository.py**: Arquivo que contém a lógica de negócio relacionada às operações de scraping. Aqui são implementadas as funções que realizam as requisições HTTP, processam as respostas e extraem os dados necessários utilizando expressões regulares.
+          - **repository.py**: File containing the business logic related to scraping operations. It implements functions that send HTTP requests, process responses, and extract necessary data using regular expressions.
 
-          - **routes.py**: Arquivo que define as rotas da API relacionadas às operações de scraping. Este arquivo mapeia os endpoints da API para as funções correspondentes no `repository.py`, permitindo que os clientes da API acionem as operações de scraping através de requisições HTTP.
+          - **routes.py**: File defining API routes related to scraping operations. This file maps API endpoints to corresponding functions in `repository.py`, allowing API clients to trigger scraping operations via HTTP requests.
 
-## Dependências
+## Dependencies
 
-A classe Scrapper é responsável por realizar a raspagem de dados do site alvo. Ela possui métodos estáticos que executam diferentes operações de extração de dados.
+The `Scrapper` class is responsible for scraping data from the target website. It has static methods that perform different data extraction operations.
 
-### Métodos Principais:
+### Main Methods:
 
-- ***fetch_all_products(url: str = None, pages: int = 1) -> list:*** Este método percorre as páginas do site especificado, extrai informações sobre os produtos e retorna uma lista de dicionários contendo os detalhes de cada produto.
+- ***fetch_all_products(url: str = None, pages: int = 1) -> list:*** This method iterates through the specified website pages, extracts product information, and returns a list of dictionaries containing product details.
 
-- ***fetch_by_id(url: str = None, id: int = 1) -> dict:*** Extrai informações de um produto específico com base no seu ID.
+- ***fetch_by_id(url: str = None, id: int = 1) -> dict:*** Extracts information for a specific product based on its ID.
 
-- ***fetch_by_page(url: str = None, page: int = 1) -> list:*** Extrai informações de todos os produtos presentes em uma página específica.
+- ***fetch_by_page(url: str = None, page: int = 1) -> list:*** Extracts information for all products on a specific page.
 
-## Detalhamento do Método fetch_all_products
+## Breakdown of the `fetch_all_products` Method
 
-Este método realiza as seguintes etapas:
+This method follows these steps:
 
-- **Definição da URL Base:** Se nenhuma URL for fornecida, utiliza uma URL padrão.
+- **Base URL Definition:** If no URL is provided, a default URL is used.
 
-- **Iteração pelas Páginas:** Percorre o número especificado de páginas, construindo a URL correspondente para cada uma.
+- **Page Iteration:** Loops through the specified number of pages, constructing the corresponding URL for each one.
 
-- **Requisição HTTP:** Utiliza a biblioteca Requests para obter o conteúdo HTML da página. 
+- **HTTP Request:** Uses the `requests` library to retrieve the page’s HTML content.
 
-- **Parsing do Conteúdo:** Emprega expressões regulares para localizar e extrair informações relevantes, como título, preço, link do produto, descrição e avaliação.
+- **Content Parsing:** Employs regular expressions to locate and extract relevant information, such as title, price, product link, description, and rating.
 
-- **Armazenamento dos Dados:** Os dados extraídos são armazenados em uma lista de dicionários, que é retornada ao final do processo.
+- **Data Storage:** Extracted data is stored in a list of dictionaries, which is returned at the end of the process.
 
-## Considerações Adicionais
+## Additional Considerations
 
-- **Modularidade**: A organização do código em módulos específicos, como `core` para configurações e `services` para funcionalidades específicas, promove uma arquitetura limpa e facilita a manutenção e escalabilidade do projeto.
+- **Modularity**: Organizing the code into specific modules, such as `core` for configurations and `services` for specific functionalities, promotes a clean architecture and facilitates project maintenance and scalability.
 
-Esta estrutura segue as melhores práticas recomendadas para projetos desenvolvidos com FastAPI, promovendo uma organização clara e eficiente do código-fonte. 
+This structure follows best practices for FastAPI-based projects, ensuring a clear and efficient organization of the source code.
