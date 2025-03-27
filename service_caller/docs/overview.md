@@ -14,22 +14,29 @@ These functions send HTTP requests to an external API to retrieve product data.
 import requests
 
 BASE_URL = "http://localhost:3000/api/v1/products/computers"
+CHG_URL = ""
 
-def get_all_products(url: str = None, pages: int = 1):
+def get_all_products(url: str = None, pages: int = 1, category: str = "laptops"):
     """
-    Fetches all products with pagination.
+    Fetches all products from the given URL, paginated.
     
     Args:
-        url (str): The API endpoint. Defaults to BASE_URL.
+        url (str): The API endpoint. Defaults to CHG_URL.
         pages (int): Page number to fetch.
+        category (str): Product category (laptops/tablets).
 
     Returns:
         dict: JSON response or error message.
     """
     try:
         if not url:
-            url = BASE_URL
-        response = requests.get(f"{url}?page={pages}")
+            url = CHG_URL
+        
+        request_url = f"{BASE_URL}?pages={pages}&category={category}"
+        if url:
+            request_url += f"&url={url}"
+            
+        response = requests.get(request_url)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -38,9 +45,9 @@ def get_all_products(url: str = None, pages: int = 1):
 def get_product_by_id(url: str = None, product_id: int = 1):
     """
     Fetches product details by ID.
-    
+
     Args:
-        url (str): The API endpoint. Defaults to BASE_URL.
+        url (str): The API endpoint. Defaults to CHG_URL.
         product_id (int): ID of the product to fetch.
 
     Returns:
@@ -48,28 +55,39 @@ def get_product_by_id(url: str = None, product_id: int = 1):
     """
     try:
         if not url:
-            url = BASE_URL
-        response = requests.get(f"{url}/{product_id}")
+            url = CHG_URL
+        
+        request_url = f"{BASE_URL}/product/{product_id}"
+        if url:
+            request_url += f"?url={url}"
+            
+        response = requests.get(request_url)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
         return {"error": f"Error fetching data: {e}"}
 
-def get_products_by_page(url: str = None, page: int = 1):
+def get_products_by_page(url: str = None, page: int = 1, category: str = "laptops"):
     """
     Fetches products from a specific page.
-    
+
     Args:
-        url (str): The API endpoint. Defaults to BASE_URL.
+        url (str): The API endpoint. Defaults to CHG_URL.
         page (int): Page number.
+        category (str): Product category (laptops/tablets).
 
     Returns:
         dict: JSON response or error message.
     """
     try:
         if not url:
-            url = BASE_URL
-        response = requests.get(f"{url}/page/{page}")
+            url = CHG_URL
+        
+        request_url = f"{BASE_URL}/page/{page}?category={category}"
+        if url:
+            request_url += f"&url={url}"
+            
+        response = requests.get(request_url)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -90,25 +108,25 @@ from . import repository
 router = APIRouter()
 
 @router.get("/")
-async def fetch_all_products(url: str = None, pages: int = 1):
+async def fetch_all_products(url: str = None, pages: int = 1, category: str = "laptops"):
     """
     Endpoint to fetch all products with pagination.
     """
-    return repository.get_all_products(url, pages)
+    return repository.get_all_products(url, pages, category)
 
-@router.get("/{product_id}")
-async def fetch_by_id(url: str = None, product_id: int = 1):
+@router.get("/product/{id}")
+async def fetch_by_id(id: int, url: str = None):
     """
     Endpoint to fetch a product by ID.
     """
-    return repository.get_product_by_id(url, product_id)
+    return repository.get_product_by_id(url, id)
 
 @router.get("/page/{page}")
-async def fetch_by_page(url: str = None, page: int = 1):
+async def fetch_by_page(page: int, url: str = None, category: str = "laptops"):
     """
     Endpoint to fetch products by page.
     """
-    return repository.get_products_by_page(url, page)
+    return repository.get_products_by_page(url, page, category)
 ```
 
 ---
@@ -142,29 +160,4 @@ app.add_middleware(
 
 # Register API router
 app.include_router(caller_routes, prefix="/api/v1/crawler")
-```
-
----
-
-## 4. **Docker Setup**
-### **Dockerfile**
-Defines the container environment for the FastAPI application.
-```dockerfile
-# Use the official Python image
-FROM python:3.12-slim
-
-# Set the working directory
-WORKDIR /root
-
-# Copy the requirements file
-COPY requirements.txt .
-
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the application code
-COPY . .
-
-# Expose the port
-EXPOSE 8000
 ```
