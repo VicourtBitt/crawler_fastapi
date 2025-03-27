@@ -59,21 +59,22 @@ The `Scrapper` class is responsible for scraping data from the target website. I
 
 ### Main Methods:
 
-- ***fetch_all_products(url: str = None, pages: int = 1) -> list:*** This method iterates through the specified website pages, extracts product information, and returns a list of dictionaries containing product details.
+- **fetch_all_products(url: str = None, pages: int = 1, category: str = "laptops") -> list:** This method iterates through the specified website pages, extracts product information for the given category (laptops or tablets), and returns a list of dictionaries containing product details.
 
-- ***fetch_by_id(url: str = None, id: int = 1) -> dict:*** Extracts information for a specific product based on its ID.
+- **fetch_by_id(id: int = 1, url: str = None) -> dict:** Extracts information for a specific product based on its ID. Uses specific regex patterns to extract detailed product information including price, title, description, available options (swatches), and rating.
 
-- ***fetch_by_page(url: str = None, page: int = 1) -> list:*** Extracts information for all products on a specific page.
+- **fetch_by_page(page: int = 1, url: str = None, category: str = "laptops") -> list:** Extracts information for all products on a specific page for the given category. Returns a list of product dictionaries.
+
 
 ## Breakdown of the `fetch_all_products` Method
 
 This method follows these steps:
 
-- **Base URL Definition:** If no URL is provided, a default URL is used.
+- **URL Construction:** If no URL is provided, it constructs a URL based on the category (laptops or tablets).
 
 - **Page Iteration:** Loops through the specified number of pages, constructing the corresponding URL for each one.
 
-- **HTTP Request:** Uses the `requests` library to retrieve the page’s HTML content.
+- **HTTP Request:** Uses the `requests` library to retrieve the page's HTML content with error handling for each page.
 
 - **Content Parsing:** Employs regular expressions to locate and extract relevant information, such as title, price, product link, description, and rating.
 
