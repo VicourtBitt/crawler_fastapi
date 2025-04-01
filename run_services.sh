@@ -6,45 +6,19 @@ handle_error() {
     exit 1
 }
 
-# Function to run Docker services
+# Function to run Docker services in the root directory
 run_docker() {
     echo "Starting Docker services..."
-    docker compose up --build $1 || handle_error "Failed to start Docker services"
+    # Ensure we're in the root directory where docker-compose.yml is located
+    cd "$(dirname "$0")/.." || handle_error "Failed to navigate to root directory"
+    docker compose up $@ || handle_error "Failed to start Docker services"
 }
 
-# Function to run service_caller application
-run_service_caller() {
-    echo "Starting service_caller application..."
-    cd service_caller || handle_error "Failed to enter service_caller directory"
-    uvicorn app.main:app --host 0.0.0.0 --port 8000 || handle_error "Failed to start uvicorn server"
-}
-
-# Check if command line argument is provided
+# Process arguments
 if [ $# -eq 0 ]; then
-    # No arguments, run everything by default
-    echo "Running all services by default..."
-    run_docker "-d"
-    run_service_caller
+    # No arguments, just run docker compose up
+    run_docker
 else
-    # Process provided argument
-    case "$1" in
-        docker)
-            run_docker
-            ;;
-        service)
-            run_service_caller
-            ;;
-        all)
-            run_docker "-d"
-            run_service_caller
-            ;;
-        *)
-            echo "Usage: $0 {docker|service|all}"
-            echo "  docker  - Run Docker services"
-            echo "  service - Run service_caller application"
-            echo "  all     - Run both Docker services and service_caller application"
-            echo "  (no args) - Same as 'all'"
-            exit 1
-            ;;
-    esac
+    # Pass all arguments to docker compose
+    run_docker "$@"
 fi
