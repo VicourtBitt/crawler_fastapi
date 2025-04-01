@@ -2,10 +2,27 @@ version: "3.9"
 
 services:
   regex_crawler:
-    build: .
     container_name: regex_crawler
     command: uvicorn main:app --host 0.0.0.0 --port 3000
     working_dir: /root/app/
     image: vicourtgcb/regex_crawler:latest
     ports:
       - "3000:3000"
+    networks:
+      - app_network
+
+  service_caller:
+    container_name: service_caller
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    working_dir: /root/app/
+    image: vicourtgcb/service_caller:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
+    depends_on:
+      - regex_crawler
+
+networks:
+  app_network:
+    driver: bridge
