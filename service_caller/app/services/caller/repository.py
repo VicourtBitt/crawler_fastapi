@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:3000/api/v1/products/computers"
+BASE_URL = "http://regex_crawler:3000/api/v1/products/computers"
 CHG_URL = ""
 
 def get_all_products(url: str = None, pages: int = 1, category: str = "laptops"):
