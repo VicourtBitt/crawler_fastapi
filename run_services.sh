@@ -9,9 +9,13 @@ handle_error() {
 # Function to run Docker services in the root directory
 run_docker() {
     echo "Starting Docker services..."
-    # Ensure we're in the root directory where docker-compose.yml is located
-    cd "$(dirname "$0")/.." || handle_error "Failed to navigate to root directory"
-    docker compose up $@ || handle_error "Failed to start Docker services"
+    
+    # Get the absolute path to the root directory (where docker-compose.yml is located)
+    ROOT_DIR="$(dirname "$(readlink -f "$0")")"
+    cd "$ROOT_DIR" || handle_error "Failed to navigate to root directory"
+    
+    echo "Running docker-compose in: $(pwd)"
+    sudo docker compose up "$@" || handle_error "Failed to start Docker services"
 }
 
 # Process arguments
